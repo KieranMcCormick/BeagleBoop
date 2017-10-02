@@ -1,0 +1,21 @@
+body {
+  background-image: url("./images/shattered.png");
+  background-attachment: fixed;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  }
+
+.container {
+  background-color: #fff;
+  width: 750px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media screen and (min-width: 42em) and (max-width: 64em) {
+  .container {
+    padding: 2rem 4rem;
+    font-size: 1.1rem; } }
+
+    
