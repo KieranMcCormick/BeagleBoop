@@ -1,0 +1,23 @@
+{
+    "kieran": {
+        "alert": false,
+        "seed": 0,
+        "timeToAnswer": 0,
+        "ownerName": "Kieran",
+        "blacklist": []
+    },
+    "eddie": {
+        "alert": false,
+        "seed": 0,
+        "timeToAnswer": 0,
+        "ownerName": "Eddie",
+        "blacklist": []
+    },
+    "jamie": {
+        "alert": false,
+        "seed": 0,
+        "timeToAnswer": 0,
+        "ownerName": "Jamie",
+        "blacklist": []
+    }
+}
