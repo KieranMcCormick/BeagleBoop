@@ -20,46 +20,46 @@
 
   <div class="container" id="tabs" align="center">
     <p>
-      <b>Beagle Bone</b>.
+      <b>Beagle Boop Control Panel</b>
     </p>
     <div class="dropdown">
-      <button onclick="myFunction()" class="dropbtn">Select board</button>
+      <button class="dropbtn">Select board</button>
       <div id="myDropdown" class="dropdown-content">
-
-        <a id="hiddenLink" href="#home" display="none">Home</a>
+        <a id="hiddenLink"></a>
       </div>
     </div>
-    <h4>Current time to answer is:
-      <span class="answerTimeDisplay"></span>
-    </h4>
 
-    <form>
+    <form id="boardForm">
       <div>
+
+        <h4>Editing board:
+          <span id="currentBoard">none</span>
+        </h4>
         <p>Time to answer:
           <span>
-            <input type="number" name="answerTimeInput" class="timeInput" min="1" max="6">
+            <input id="timeInput" type="number" name="answerTimeInput" class="timeInput" min="1" max="6">
           </span>
         </p>
         <p>Number of lives:
           <span>
-            <input type="number" name="lives" class="lives" min="1" max="6">
+            <input id="lives" type="number" name="lives" class="lives" min="1" max="6">
           </span>
         </p>
         <p>Black list:
           <div>
             <p>Accelerometer
               <span>
-                <input type="checkbox" name="accelerometer" value="accelerometer">
+                <input id="accelerometer" type="checkbox" name="accelerometer" value="accelerometer">
               </span>
             </p>
             <p>Potentiometer
               <span>
-                <input type="checkbox" name="potentiometer" value="potentiometer">
+                <input id="potentiometer" type="checkbox" name="potentiometer" value="potentiometer">
               </span>
             </p>
             <p>Joystick
               <span>
-                <input type="checkbox" name="joystick" value="joystick">
+                <input id="joystick" type="checkbox" name="joystick" value="joystick">
               </span>
             </p>
           </div>

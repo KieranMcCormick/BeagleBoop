@@ -60,6 +60,6 @@ body {
     background-color: #3e8e41;
 }
 
-#hiddenLink {
+#boardForm, #hiddenLink {
     display:none;    
 }
