@@ -37,13 +37,19 @@
         </h4>
         <p>Time to answer:
           <span>
-            <input id="timeInput" type="number" name="answerTimeInput" class="timeInput" min="1" max="6">
+            <input id="timeToAnswer" type="number" name="answerTimeInput" class="timeInput" min="1" max="6">
           </span>
+          <p>Current time to answer:
+            <span id="currentTimeToAnswer"></span>
+          </p>
         </p>
         <p>Number of lives:
           <span>
             <input id="lives" type="number" name="lives" class="lives" min="1" max="6">
           </span>
+          <p>Current ammount of starting lives:
+            <span id="currentLives"></span>
+          </p>
         </p>
         <p>Black list:
           <div>
@@ -65,7 +71,7 @@
           </div>
         </p>
       </div>
-      <button type="button" class="btn btn-primary answerTimeButton">Update</button>
+      <button type="button" id="updateButton" class="btn btn-primary answerTimeButton">Update</button>
     </form>
 
 
