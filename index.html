@@ -24,16 +24,24 @@
     </p>
     <div class="dropdown">
       <button class="dropbtn">Select board</button>
-      <div id="myDropdown" class="dropdown-content">
+      <div id="boardDropdown" class="dropdown-content">
         <a id="hiddenLink"></a>
       </div>
     </div>
-
+    <div class="dropdown">
+      <button id="multiplayer-btn" class="dropbtn">Multiplayer</button>
+      <div id="multiplayerDropdown" class="dropdown-content">
+        <a id="multiNone">VS: None</a>
+      </div>
+    </div>
     <form id="boardForm">
       <div>
 
         <h4>Editing board:
           <span id="currentBoard">none</span>
+        </h4>
+        <h4>VS:
+          <span id="currentMultiplayerBoard">none</span>
         </h4>
         <p>Time to answer (sec):
           <span>

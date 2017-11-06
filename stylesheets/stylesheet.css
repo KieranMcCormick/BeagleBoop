@@ -60,6 +60,7 @@ body {
     background-color: #3e8e41;
 }
 
-#boardForm, #hiddenLink {
+#boardForm, #hiddenLink, #multiplayer-btn{
     display:none;    
 }
+
