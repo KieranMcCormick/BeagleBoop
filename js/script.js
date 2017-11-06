@@ -101,6 +101,9 @@ function selectBoard(boardName) {
     $("#currentBoard").text(boardData[boardName].ownerName);
     $("#timeToAnswer").val(boardData[boardName].timeToAnswer);
     $("#lives").val(boardData[boardName].lives);
+    $("#currentTimeToAnswer").text(boardData[boardName].timeToAnswer);
+    $("#currentLives").text(boardData[boardName].lives);
+
 
     $("#boardForm").show();
 }
