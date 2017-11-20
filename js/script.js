@@ -56,7 +56,22 @@ $(document).ready(function () {
         if (multiplayerBoard != "none") {
             putData(seed, multiplayerBoard);
         }
+        function updateUI() {
+            $.get({
+                url: BOARDURL
+            })
+                .done(function (data) {
+                    boardData = data;
 
+                    if (currentBoard != "none") {
+                        $("#currentTimeToAnswer").text(boardData[currentBoard].timeToAnswer);
+                        $("#currentLives").text(boardData[currentBoard].lives);
+                    }
+
+                })
+
+        }
+        timeInterval = setInterval(updateUI, 1000);
     });
 
     function updateUI() {

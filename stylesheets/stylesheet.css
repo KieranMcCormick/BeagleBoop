@@ -11,6 +11,7 @@ body {
   width: 750px;
   margin-right: auto;
   margin-left: auto;
+  margin-bottom: 20px;
 }
 
 @media screen and (min-width: 42em) and (max-width: 64em) {
@@ -64,3 +65,9 @@ body {
     display:none;    
 }
 
+#strtBox, #endBox {
+    display: none;
+	padding: 10px;
+	border: 1px solid;
+	background-color: green;	
+}
