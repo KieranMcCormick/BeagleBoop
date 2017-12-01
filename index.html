@@ -35,6 +35,43 @@
         <h4>VS:
           <span id="currentMultiplayerBoard">none</span>
         </h4>
+
+        <div id="resBox" class="resBox">
+          <h2>Game over!</h2>
+          <p>Good job
+            <span id="player1Name"></span>, please see your last games results below:</p>
+          <p>Average time to answer:
+            <span id="timeResult"></span>
+          </p>
+          <p>Number of missed inputs:
+            <span id="missedResult"></span>
+          </p>
+          <p>Number of wrong inputs:
+            <span id="wrongResult"></span>
+          </p>
+          <p>Number of correct inputs:
+            <span id="correctResult"></span>
+          </p>
+        </div>
+
+        <div id="resBoxMulti" class="resBox">
+          <p>Good job
+            <span id="player2Name"></span>, please see your last games results below:</p>
+          <p>Average time to answer:
+            <span id="timeResultMulti"></span>
+          </p>
+          <p>Number of missed inputs:
+            <span id="missedResultMulti"></span>
+          </p>
+          <p>Number of wrong inputs:
+            <span id="wrongResultMulti"></span>
+          </p>
+          <p>Number of correct inputs:
+            <span id="correctResultMulti"></span>
+          </p>
+        </div>
+
+
         <p>Time to answer (sec):
           <span>
             <input id="timeToAnswer" type="number" name="answerTimeInput" class="timeInput" min="1" max="6">
@@ -53,9 +90,49 @@
         </p>
         <p>Black list:
           <div>
-            <p>Accelerometer
+            <p>Accelerometer tilt left
               <span>
-                <input id="accelerometer" type="checkbox" name="accelerometer" value="accelerometer">
+                <input id="accelerometer_tilt_left" type="checkbox" name="accelerometer_tilt_left" value="accelerometer_tilt_left">
+              </span>
+            </p>
+            <p>Accelerometer tilt right
+              <span>
+                <input id="accelerometer_tilt_right" type="checkbox" name="accelerometer_tilt_right" value="accelerometer_tilt_right">
+              </span>
+            </p>
+            <p>Accelerometer pitch up
+              <span>
+                <input id="accelerometer_pitch_up" type="checkbox" name="accelerometer_pitch_up" value="accelerometer_pitch_up">
+              </span>
+            </p>
+            <p>Accelerometer pitch down
+              <span>
+                <input id="accelerometer_pitch_down" type="checkbox" name="accelerometer_pitch_down" value="accelerometer_pitch_down">
+              </span>
+            </p>
+            <p>Joystick up
+              <span>
+                <input id="joystick_up" type="checkbox" name="joystick_up" value="joystick_up">
+              </span>
+            </p>
+            <p>Joystick down
+              <span>
+                <input id="joystick_down" type="checkbox" name="joystick_down" value="joystick_down">
+              </span>
+            </p>
+            <p>Joystick left
+              <span>
+                <input id="joystick_left" type="checkbox" name="joystick_left" value="joystick_left">
+              </span>
+            </p>
+            <p>Joystick right
+              <span>
+                <input id="joystick_right" type="checkbox" name="joystick_right" value="joystick_right">
+              </span>
+            </p>
+            <p>Joystick center
+              <span>
+                <input id="joystick_center" type="checkbox" name="joystick_center" value="joystick_center">
               </span>
             </p>
             <p>Potentiometer
@@ -63,9 +140,9 @@
                 <input id="potentiometer" type="checkbox" name="potentiometer" value="potentiometer">
               </span>
             </p>
-            <p>Joystick
+            <p>Pattern Game
               <span>
-                <input id="joystick" type="checkbox" name="joystick" value="joystick">
+                <input id="button_squence" type="checkbox" name="button_squence" value="button_squence">
               </span>
             </p>
           </div>

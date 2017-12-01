@@ -4,12 +4,22 @@ var boardData;
 var currentBoard = "none";
 var multiplayerBoard = "none"
 
+var currentBoardResults;
+var currentBoardFinished = false;
+var multiplayerBoardResults;
+var multiplayerBoardFinished = false;
+
 var UPDATEURL_START = "https://beagle-boop.firebaseio.com/boards/";
 var UPDATEURL_ALERT = "/alert.json";
 var UPDATEURL_SEED = "/seed.json";
+var UPDATEURL_BLACKLIST = "/blacklist.json"
+var UPDATEURL_RESULTS = "/results.json"
+var UPDATEURL_RESULTS_FINISHED = "/results/gameFinished.json"
 
 var UPDATEURL_LIVES = "lives";
 var UPDATEURL_TIMETOANSWER = "timeToAnswer";
+
+var gameFinishInterval;
 
 var UPDATE_URL_END = [
     UPDATEURL_LIVES,
@@ -71,7 +81,7 @@ $(document).ready(function () {
                 })
 
         }
-        timeInterval = setInterval(updateUI, 1000);
+        //timeInterval = setInterval(updateUI, 1500);
     });
 
     function updateUI() {
@@ -105,6 +115,49 @@ function putData(seed, board) {
         })
     }
 
+    var blackList = []
+
+    if ($('#accelerometer_tilt_left').is(":checked")) {
+        blackList.push("ACCELEROMETER_TILT_LEFT")
+    }
+    if ($('#accelerometer_tilt_right').is(":checked")) {
+        blackList.push("ACCELEROMETER_TILT_RIGHT")
+    }
+    if ($('#accelerometer_pitch_up').is(":checked")) {
+        blackList.push("ACCELEROMETER_PITCH_UP")
+    }
+    if ($('#accelerometer_pitch_down').is(":checked")) {
+        blackList.push("ACCELEROMETER_PITCH_DOWN")
+    }
+    if ($('#joystick_up').is(":checked")) {
+        blackList.push("JOYSTICK_UP")
+    }
+    if ($('#joystick_down').is(":checked")) {
+        blackList.push("JOYSTICK_DOWN")
+    }
+    if ($('#joystick_left').is(":checked")) {
+        blackList.push("JOYSTICK_LEFT")
+    }
+    if ($('#joystick_right').is(":checked")) {
+        blackList.push("JOYSTICK_RIGHT")
+    }
+    if ($('#joystick_center').is(":checked")) {
+        blackList.push("JOYSTICK_CENTER")
+    }
+    if ($('#potentiometer').is(":checked")) {
+        blackList.push("POTENTIOMETER_TURN")
+    }
+    if ($('#button_squence').is(":checked")) {
+        blackList.push("BUTTON_SEQUENCE")
+    }
+    $.ajax({
+        method: "PUT",
+        url: DATAURL + board + UPDATEURL_BLACKLIST,
+        data: JSON.stringify(blackList)
+    }).done(function (data) {
+        console.log('Blacklist updated')
+    })
+
     $.ajax({
         method: "PUT",
         url: DATAURL + board + UPDATEURL_SEED,
@@ -120,6 +173,124 @@ function putData(seed, board) {
     }).done(function (data) {
         console.log('Alert updated')
     })
+
+    function checkForResults() {
+        if (multiplayerBoard != "none") {
+            $.get({
+                url: DATAURL + board + UPDATEURL_RESULTS
+            })
+                .done(function (data) {
+                    boardData = data;
+                    console.log("checkForResults")
+                    console.log(boardData)
+                    console.log(boardData.gameFinished)
+                    if (boardData) {
+                        if (boardData.gameFinished) {
+                            clearInterval(gameFinishInterval)
+                            currentBoardResults = boardData;
+                            currentBoardFinished = true;
+                            $.ajax({
+                                method: "PUT",
+                                url: DATAURL + board + UPDATEURL_RESULTS_FINISHED,
+                                data: "false"
+                            }).done(function (data) {
+                                console.log('Alert updated')
+                            })
+                        }
+                    }
+                })
+            $.get({
+                url: DATAURL + multiplayerBoard + UPDATEURL_RESULTS
+            })
+                .done(function (data) {
+                    boardData = data;
+                    console.log("checkForResults")
+                    console.log(boardData)
+                    console.log(boardData.gameFinished)
+                    if (boardData) {
+                        if (boardData.gameFinished) {
+                            clearInterval(gameFinishInterval)
+                            multiplayerBoardResults = boardData;
+                            multiplayerBoardFinished = true;
+                            $.ajax({
+                                method: "PUT",
+                                url: DATAURL + multiplayerBoard + UPDATEURL_RESULTS_FINISHED,
+                                data: "false"
+                            }).done(function (data) {
+                                console.log('Alert updated')
+                            })
+                        }
+                    }
+                })
+            function checkForMultiResultDisplay() {
+                console.log("Checking if both finished")
+                if (currentBoardFinished && multiplayerBoardFinished) {
+                    console.log("both finished")
+                    clearInterval(gameFinishIntervalMulti)
+                    clearInterval(gameFinishInterval)
+                    setMultiplayerBoardResults();
+                    setCurrentBoardResults();
+                    multiplayerBoardFinished = false;
+                    currentBoardFinished = false;
+                }
+            }
+            gameFinishIntervalMulti = setInterval(checkForMultiResultDisplay, 1000);
+
+        } else {
+            $.get({
+                url: DATAURL + board + UPDATEURL_RESULTS
+            })
+                .done(function (data) {
+                    boardData = data;
+                    console.log("checkForResults")
+                    console.log(boardData)
+                    console.log(boardData.gameFinished)
+                    if (boardData) {
+                        if (boardData.gameFinished) {
+                            clearInterval(gameFinishInterval)
+                            currentBoardResults = boardData;
+                            setCurrentBoardResults();
+                            $.ajax({
+                                method: "PUT",
+                                url: DATAURL + board + UPDATEURL_RESULTS_FINISHED,
+                                data: "false"
+                            }).done(function (data) {
+                                console.log('Alert updated')
+                            })
+                        }
+                    }
+                })
+        }
+    }
+    if (!currentBoardFinished || !multiplayerBoardFinished) {
+        gameFinishInterval = setInterval(checkForResults, 1000);
+    }
+}
+
+function setCurrentBoardResults() {
+    $('#player1Name').html(currentBoard);
+    $('#timeResult').html(currentBoardResults.averageInputTime);
+    $('#missedResult').html(currentBoardResults.missCount);
+    $('#wrongResult').html(currentBoardResults.wrongInputCount);
+    $('#correctResult').html(currentBoardResults.score);
+
+    $('#resBox').show();
+    errTimeout = setTimeout(function () {
+        $('#resBox').hide();
+    }, 10000);
+}
+
+function setMultiplayerBoardResults() {
+    $('#player2Name').html(multiplayerBoard);
+    $('#timeResultMulti').html(multiplayerBoardResults.averageInputTime);
+    $('#missedResultMulti').html(multiplayerBoardResults.missCount);
+    $('#wrongResultMulti').html(multiplayerBoardResults.wrongInputCount);
+    $('#correctResultMulti').html(multiplayerBoardResults.score);
+
+    $('#resBoxMulti').show();
+    errTimeout = setTimeout(function () {
+        $('#resBoxMulti').hide();
+    }, 10000);
 }
 
 function selectMultiplayerBoard(boardName) {
@@ -148,6 +319,57 @@ function selectBoard(boardName) {
     $("#lives").val(boardData[boardName].lives);
     $("#currentTimeToAnswer").text(boardData[boardName].timeToAnswer);
     $("#currentLives").text(boardData[boardName].lives);
+
+    $('#joystick_up').attr('checked', false);
+    $('#joystick_down').attr('checked', false);
+    $('#joystick_left').attr('checked', false);
+    $('#joystick_right').attr('checked', false);
+    $('#joystick_center').attr('checked', false);
+    $('#accelerometer_tilt_left').attr('checked', false);
+    $('#accelerometer_tilt_right').attr('checked', false);
+    $('#accelerometer_pitch_up').attr('checked', false);
+    $('#accelerometer_pitch_down').attr('checked', false);
+    $('#potentiometer').attr('checked', false);
+    $('#button_squence').attr('checked', false);
+
+    if (boardData[currentBoard].blacklist) {
+        console.log(boardData[currentBoard].blacklist)
+        for (var i = 0; i < boardData[currentBoard].blacklist.length; i++) {
+            if (boardData[currentBoard].blacklist[i] == "JOYSTICK_UP") {
+                $('#joystick_up').attr('checked', true);
+            }
+            if (boardData[currentBoard].blacklist[i] == "JOYSTICK_DOWN") {
+                $('#joystick_down').attr('checked', true);
+            }
+            if (boardData[currentBoard].blacklist[i] == "JOYSTICK_LEFT") {
+                $('#joystick_left').attr('checked', true);
+            }
+            if (boardData[currentBoard].blacklist[i] == "JOYSTICK_RIGHT") {
+                $('#joystick_right').attr('checked', true);
+            }
+            if (boardData[currentBoard].blacklist[i] == "JOYSTICK_CENTER") {
+                $('#joystick_center').attr('checked', true);
+            }
+            if (boardData[currentBoard].blacklist[i] == "ACCELEROMETER_TILT_LEFT") {
+                $('#accelerometer_tilt_left').attr('checked', true);
+            }
+            if (boardData[currentBoard].blacklist[i] == "ACCELEROMETER_TILT_RIGHT") {
+                $('#accelerometer_tilt_right').attr('checked', true);
+            }
+            if (boardData[currentBoard].blacklist[i] == "ACCELEROMETER_PITCH_UP") {
+                $('#accelerometer_pitch_up').attr('checked', true);
+            }
+            if (boardData[currentBoard].blacklist[i] == "ACCELEROMETER_PITCH_DOWN") {
+                $('#accelerometer_pitch_down').attr('checked', true);
+            }
+            if (boardData[currentBoard].blacklist[i] == "POTENTIOMETER_TURN") {
+                $('#potentiometer').attr('checked', true);
+            }
+            if (boardData[currentBoard].blacklist[i] == "BUTTON_SEQUENCE") {
+                $('#button_squence').attr('checked', true);
+            }
+        }
+    }
 
     $("#multiplayer-btn").show();
 
