@@ -152,7 +152,7 @@ function putData(seed, board) {
     }
     $.ajax({
         method: "PUT",
-        url: DATAURL + board + UPDATEURL_BLACKLIST,
+        url: DATAURL + currentBoard + UPDATEURL_BLACKLIST,
         data: JSON.stringify(blackList)
     }).done(function (data) {
         console.log('Blacklist updated')
@@ -173,99 +173,112 @@ function putData(seed, board) {
     }).done(function (data) {
         console.log('Alert updated')
     })
-
-    function checkForResults() {
-        if (multiplayerBoard != "none") {
-            $.get({
-                url: DATAURL + board + UPDATEURL_RESULTS
-            })
-                .done(function (data) {
-                    boardData = data;
-                    console.log("checkForResults")
-                    console.log(boardData)
-                    console.log(boardData.gameFinished)
-                    if (boardData) {
-                        if (boardData.gameFinished) {
-                            clearInterval(gameFinishInterval)
-                            currentBoardResults = boardData;
-                            currentBoardFinished = true;
-                            $.ajax({
-                                method: "PUT",
-                                url: DATAURL + board + UPDATEURL_RESULTS_FINISHED,
-                                data: "false"
-                            }).done(function (data) {
-                                console.log('Alert updated')
-                            })
-                        }
-                    }
-                })
-            $.get({
-                url: DATAURL + multiplayerBoard + UPDATEURL_RESULTS
-            })
-                .done(function (data) {
-                    boardData = data;
-                    console.log("checkForResults")
-                    console.log(boardData)
-                    console.log(boardData.gameFinished)
-                    if (boardData) {
-                        if (boardData.gameFinished) {
-                            clearInterval(gameFinishInterval)
-                            multiplayerBoardResults = boardData;
-                            multiplayerBoardFinished = true;
-                            $.ajax({
-                                method: "PUT",
-                                url: DATAURL + multiplayerBoard + UPDATEURL_RESULTS_FINISHED,
-                                data: "false"
-                            }).done(function (data) {
-                                console.log('Alert updated')
-                            })
-                        }
-                    }
-                })
-            function checkForMultiResultDisplay() {
-                console.log("Checking if both finished")
-                if (currentBoardFinished && multiplayerBoardFinished) {
-                    console.log("both finished")
-                    clearInterval(gameFinishIntervalMulti)
-                    clearInterval(gameFinishInterval)
-                    setMultiplayerBoardResults();
-                    setCurrentBoardResults();
-                    multiplayerBoardFinished = false;
-                    currentBoardFinished = false;
-                }
-            }
-            gameFinishIntervalMulti = setInterval(checkForMultiResultDisplay, 1000);
-
-        } else {
-            $.get({
-                url: DATAURL + board + UPDATEURL_RESULTS
-            })
-                .done(function (data) {
-                    boardData = data;
-                    console.log("checkForResults")
-                    console.log(boardData)
-                    console.log(boardData.gameFinished)
-                    if (boardData) {
-                        if (boardData.gameFinished) {
-                            clearInterval(gameFinishInterval)
-                            currentBoardResults = boardData;
-                            setCurrentBoardResults();
-                            $.ajax({
-                                method: "PUT",
-                                url: DATAURL + board + UPDATEURL_RESULTS_FINISHED,
-                                data: "false"
-                            }).done(function (data) {
-                                console.log('Alert updated')
-                            })
-                        }
-                    }
-                })
-        }
-    }
-    if (!currentBoardFinished || !multiplayerBoardFinished) {
+    if (multiplayerBoard != "none") {
+        console.log("setting multi results interval")
+        gameFinishIntervalMulti = setInterval(checkForResultsMulti, 1000);
+        
+        //checkForResultsMulti();
+    } else {
+        console.log("setting solo results interval")
+        
         gameFinishInterval = setInterval(checkForResults, 1000);
+        
+        //checkForResults();        
     }
 }
+
+function checkForResults(){
+    $.get({
+        url: DATAURL + currentBoard + UPDATEURL_RESULTS
+    })
+        .done(function (data) {
+            console.log(DATAURL + currentBoard + UPDATEURL_RESULTS)
+            boardData = data;
+            console.log("Got solo results")
+            console.log(boardData)
+            console.log(boardData.gameFinished)
+            if (boardData) {
+                console.log("inner")
+                console.log(boardData.gameFinished)
+                if (boardData.gameFinished) {
+                    console.log("solo marked finished")
+                    
+                    clearInterval(gameFinishInterval)
+                    currentBoardResults = boardData;
+                    setCurrentBoardResults();
+                    $.ajax({
+                        method: "PUT",
+                        url: DATAURL + board + UPDATEURL_RESULTS_FINISHED,
+                        data: "false"
+                    }).done(function (data) {
+                        console.log('Alert updated')
+                    })
+                }
+            }
+        })
+
+}
+
+function checkForResultsMulti() {
+    if(!currentBoardFinished){
+        $.get({
+            url: DATAURL + currentBoard + UPDATEURL_RESULTS
+        })
+            .done(function (data) {
+                boardData = data;
+                console.log("Got multi results p1")
+                console.log(boardData)
+                console.log(boardData.gameFinished)
+                if (boardData) {
+                    if (boardData.gameFinished) {
+                        console.log("p1 finished")
+                        currentBoardResults = boardData;
+                        currentBoardFinished = true;
+                        $.ajax({
+                            method: "PUT",
+                            url: DATAURL + board + UPDATEURL_RESULTS_FINISHED,
+                            data: "false"
+                        }).done(function (data) {
+                            console.log('Alert updated')
+                        })
+                    }
+                }
+            })
+    }
+    if(!multiplayerBoardFinished){
+        $.get({
+            url: DATAURL + multiplayerBoard + UPDATEURL_RESULTS
+        })
+            .done(function (data) {
+                boardData = data;
+                console.log("Got multi results p2")
+                if (boardData) {
+                    if (boardData.gameFinished) {
+                        console.log("p2 finished")                        
+                        multiplayerBoardResults = boardData;
+                        multiplayerBoardFinished = true;
+                        $.ajax({
+                            method: "PUT",
+                            url: DATAURL + multiplayerBoard + UPDATEURL_RESULTS_FINISHED,
+                            data: "false"
+                        }).done(function (data) {
+                            console.log('Alert updated')
+                        })
+                    }
+                }
+            })
+    }
+    console.log("Checking if both finished")
+    if (currentBoardFinished && multiplayerBoardFinished) {
+        console.log("both finished")
+        clearInterval(checkForResultsMulti)
+        setMultiplayerBoardResults();
+        setCurrentBoardResults();
+        multiplayerBoardFinished = false;
+        currentBoardFinished = false;
+    }
+}
+
 
 function setCurrentBoardResults() {
     $('#player1Name').html(currentBoard);
