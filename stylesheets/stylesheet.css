@@ -68,7 +68,7 @@ body {
     background-color: #3e8e41;
 }
 
-#boardForm, #hiddenLink, #multiplayer-btn{
+#boardForm, #hiddenLink, #multiplayer-btn, #multiWinnerVal{
     display:none;    
 }
 
