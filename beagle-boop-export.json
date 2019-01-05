@@ -1,0 +1,52 @@
+{
+  "boards" : {
+    "eddie" : {
+      "alert" : false,
+      "lives" : 3,
+      "ownerName" : "Eddie",
+      "results" : {
+        "averageInputTime" : 1518.434814453125,
+        "gameFinished" : false,
+        "missCount" : 1,
+        "score" : 20,
+        "wrongInputCount" : 2
+      },
+      "seed" : 1512422284063,
+      "timeToAnswer" : 2
+    },
+    "jamie" : {
+      "alert" : false,
+      "lives" : 3,
+      "ownerName" : "Jamie",
+      "results" : {
+        "averageInputTime" : 1571.0,
+        "gameFinished" : false,
+        "missCount" : 1,
+        "score" : 13,
+        "wrongInputCount" : 2
+      },
+      "seed" : 1512444304774,
+      "timeToAnswer" : 2
+    },
+    "kieran" : {
+      "alert" : true,
+      "blacklist" : [ "ACCELEROMETER_TILT_LEFT", "BUTTON_SEQUENCE" ],
+      "lives" : 3,
+      "ownerName" : "Kieran",
+      "results" : {
+        "averageInputTime" : 1374.521728515625,
+        "gameFinished" : false,
+        "missCount" : 0,
+        "score" : 20,
+        "wrongInputCount" : 3
+      },
+      "seed" : 1529813533687,
+      "timeToAnswer" : 2
+    }
+  },
+  "scores" : {
+    "eddie" : 10,
+    "jamie" : 20,
+    "kieran" : -10101010
+  }
+}
